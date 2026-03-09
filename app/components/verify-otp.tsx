@@ -10,6 +10,7 @@ interface VerifyOtpProps {
 
 export default function VerifyOtp({ onVerify, onBack, onLoginSuccess }: VerifyOtpProps) {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
+  // Use an array for refs
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [timer, setTimer] = useState(114);
 
@@ -45,14 +46,13 @@ export default function VerifyOtp({ onVerify, onBack, onLoginSuccess }: VerifyOt
   const handleVerify = () => {
     const code = otp.join("");
     onVerify(code);
-    // Triggering the success callback to navigate to dashboard
     onLoginSuccess(); 
   };
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-[#f8fafc] font-sans">
       
-      {/* RESTORED: Logo Section */}
+      {/* Logo Section */}
       <div className="flex items-center gap-2 mb-8">
         <div className="bg-[#3b82f6] p-2 rounded-xl shadow-lg shadow-blue-500/30">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,7 +78,8 @@ export default function VerifyOtp({ onVerify, onBack, onLoginSuccess }: VerifyOt
                 key={index}
                 type="text"
                 maxLength={1}
-                ref={(el) => (inputRefs.current[index] = el)}
+                // FIXED: Wrapped assignment in curly braces to avoid returning the value
+                ref={(el) => { inputRefs.current[index] = el; }}
                 value={data}
                 onChange={(e) => handleChange(e.target, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
@@ -99,7 +100,7 @@ export default function VerifyOtp({ onVerify, onBack, onLoginSuccess }: VerifyOt
           </p>
         </div>
 
-        {/* RESTORED: Green Bottom Bar */}
+        {/* Green Bottom Bar */}
         <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-[#6ee7b7]"></div>
       </div>
 
